@@ -1,6 +1,6 @@
 //import logo from './logo.svg';
 import ProductList from './components/ProductList';
-import React from 'react';
+import CheckoutForm from './components/CheckoutForm';
 import './App.css';
 
     const App = () => {
@@ -8,6 +8,8 @@ import './App.css';
         <div>
           <h1>E-Commerce Website</h1>
           <ProductList />
+          <CheckoutForm />
+
         </div>
       );
     };

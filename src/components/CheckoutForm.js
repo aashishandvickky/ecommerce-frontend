@@ -1,35 +1,42 @@
-// src/components/CheckoutForm.js
+// CheckoutForm.js
+
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { processCheckout } from '../actions/checkoutActions';
+import axios from 'axios';
 
 const CheckoutForm = () => {
-  const dispatch = useDispatch();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    email: ''
+  });
 
-  const handleSubmit = e => {
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(processCheckout({ name, email }));
+    axios.post('http://localhost:5000/api/checkout', formData)
+      .then(res => {
+        console.log(res.data.message);
+      })
+      .catch(err => {
+        console.error('Error during checkout:', err);
+      });
   };
 
   return (
     <div>
       <h2>Checkout</h2>
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Name"
-          value={name}
-          onChange={e => setName(e.target.value)}
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-        />
-        <button type="submit">Proceed to Checkout</button>
+        <div>
+          <label>Name:</label>
+          <input type="text" name="name" value={formData.name} onChange={handleChange} />
+        </div>
+        <div>
+          <label>Email:</label>
+          <input type="email" name="email" value={formData.email} onChange={handleChange} />
+        </div>
+        <button type="submit">Submit</button>
       </form>
     </div>
   );
